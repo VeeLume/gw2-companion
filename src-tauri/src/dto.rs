@@ -54,7 +54,7 @@ impl From<Account> for AccountView {
             id: a.id,
             name: a.name,
             world: a.world,
-            created: a.created,
+            created: a.created.to_rfc3339(),
             access: a.access.iter().map(api_str).collect(),
             commander: a.commander,
             fractal_level: a.fractal_level,
