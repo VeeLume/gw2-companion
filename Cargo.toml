@@ -1,0 +1,39 @@
+[workspace]
+resolver = "2"
+members = ["crates/gw2-api", "crates/gw2-api-macros", "crates/gw2-api-cli", "crates/gw2-db", "src-tauri"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+authors = ["Veelume"]
+repository = "https://github.com/veelume/gw2-companion"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+
+reqwest = { version = "0.13", features = ["json", "rustls", "query"] }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+thiserror = "2"
+anyhow = "1"
+
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+rusqlite = { version = "0.38", features = [
+    "bundled",
+    "chrono",
+    "serde_json",
+    "rusqlite-macros",
+] }
+
+chrono = { version = "0.4", features = ["serde"] }
+linkme = "0.3"
+
+# Internal crates
+gw2-api = { path = "crates/gw2-api" }
+gw2-api-macros = { path = "crates/gw2-api-macros" }
+gw2-db = { path = "crates/gw2-db" }

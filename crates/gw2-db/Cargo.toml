@@ -1,0 +1,15 @@
+[package]
+name = "gw2-db"
+description = "SQLite persistence layer for GW2 Companion"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+rusqlite = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+gw2-api = { workspace = true }

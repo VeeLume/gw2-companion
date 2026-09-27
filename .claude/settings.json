@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Edit(**)",
+      "Bash(cargo *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(cargo tauri *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(sqlite3 *)"
+    ],
+    "deny": [
+      "Bash(rm -rf /*)",
+      "Bash(sudo *)"
+    ],
+    "additionalDirectories": [
+      "E:/vscode/python/gw2_api",
+      "E:/vscode/rust/gw2-api"
+    ]
+  }
+}
