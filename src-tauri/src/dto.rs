@@ -53,7 +53,7 @@ impl From<Account> for AccountView {
         Self {
             id: a.id,
             name: a.name,
-            world: a.world,
+            world: a.world.0,
             created: a.created.to_rfc3339(),
             access: a.access.iter().map(api_str).collect(),
             commander: a.commander,
