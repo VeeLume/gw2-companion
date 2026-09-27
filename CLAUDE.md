@@ -15,6 +15,18 @@ A Guild Wars 2 companion application built with Tauri + SvelteKit on the veelume
   - Schema in `migrations/001_initial.sql` (cache tables, legendary goals, checklists, settings);
     the model modules are still stubs. Only `settings` (API key) is used so far.
 
+- **`crates/gw2-mystic-forge`** — Mystic Forge recipes as compiled-in static data (the official
+  API has none; every legendary's last step is one)
+  - `recipes()` / `get(id)` / `by_output(item)` over `static` data in `src/generated.rs`:
+    no parsing or allocation at runtime. Types and `FORMAT_VERSION` in `src/lib.rs`
+  - `data/mystic_forge.json` is the same data as reviewable JSON; `data/excluded.json` lists
+    every dropped wiki record with its reason
+  - `Yield::Fixed` is the only yield a plan may rely on; `Random` recipes are listed but not usable
+  - All three files are generated, never hand-edited: `cargo run -p gw2-mystic-forge --features
+    generate --bin generate-mystic-forge` queries the GW2 wiki's Semantic MediaWiki data,
+    validates every id against `/v2/items` and stamps the game build. Regenerate when
+    `/v2/build` moves past `source().game_build`
+
 - **`src-tauri/`** — Tauri v2 backend
   - Tauri commands exposing API + DB to the frontend
   - State management via Tauri's managed state (`AppState`: DB, public client, optional auth

@@ -1,0 +1,29 @@
+[package]
+name = "gw2-mystic-forge"
+description = "Guild Wars 2 Mystic Forge recipes as static data, generated from the GW2 wiki"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+# Regenerates src/generated.rs and data/*.json from the wiki:
+#     cargo run -p gw2-mystic-forge --features generate --bin generate-mystic-forge
+# Behind a feature so the library never pulls in an HTTP stack.
+[[bin]]
+name = "generate-mystic-forge"
+path = "src/bin/generate.rs"
+required-features = ["generate"]
+
+[features]
+default = []
+generate = ["dep:anyhow", "dep:gw2-api", "dep:reqwest", "dep:serde_json", "dep:tokio"]
+
+[dependencies]
+serde = { workspace = true }
+
+anyhow = { workspace = true, optional = true }
+gw2-api = { workspace = true, optional = true }
+serde_json = { workspace = true, optional = true }
+reqwest = { workspace = true, optional = true }
+tokio = { workspace = true, optional = true }

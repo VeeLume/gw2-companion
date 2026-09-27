@@ -1684,6 +1684,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "gw2-mystic-forge"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "gw2-api",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "h2"
 version = "0.4.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"

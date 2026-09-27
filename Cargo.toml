@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/gw2-db", "src-tauri"]
+members = ["crates/gw2-db", "crates/gw2-mystic-forge", "src-tauri"]
 
 [workspace.package]
 version = "0.1.0"
@@ -37,3 +37,4 @@ gw2-api = { path = "../gw2-api/crates/gw2-api" }
 
 # Internal crates
 gw2-db = { path = "crates/gw2-db" }
+gw2-mystic-forge = { path = "crates/gw2-mystic-forge" }
