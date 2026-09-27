@@ -1,2 +1,5 @@
-onlyBuiltDependencies:
-  - esbuild
+# Not a workspace — pnpm just reads its config from here. esbuild's install
+# script fetches the platform binary vite needs; without this it is skipped
+# and vite fails at startup.
+allowBuilds:
+  esbuild: true

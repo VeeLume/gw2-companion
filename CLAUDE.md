@@ -1,6 +1,6 @@
 # GW2 Companion
 
-A Guild Wars 2 companion application built with Tauri + SolidJS.
+A Guild Wars 2 companion application built with Tauri + SvelteKit on the veelume-ui kit.
 
 ## Architecture
 
@@ -17,11 +17,30 @@ A Guild Wars 2 companion application built with Tauri + SolidJS.
 
 - **`src-tauri/`** — Tauri v2 backend
   - Tauri commands exposing API + DB to the frontend
-  - State management via Tauri's managed state (`AppState`: DB, public client, optional auth client)
+  - State management via Tauri's managed state (`AppState`: DB, public client, optional auth
+    client, settings snapshot)
+  - **Typed IPC via tauri-specta**: every command carries `#[specta::specta]` and is listed in
+    `specta_builder()` in `lib.rs`; debug starts regenerate `src/lib/bindings.ts` (or
+    `cargo run -p gw2-companion-app --features bindgen --bin export-bindings`). A command not
+    in that list does not exist for the frontend. specta/tauri-specta are pinned exactly.
+  - gw2-api types have no `specta::Type`, so they never cross IPC directly: commands return the
+    app-owned views in `dto.rs` (enums as API strings, coin as `f64` copper — specta rejects `i64`)
+  - App preferences: one `AppSettings` snapshot in `settings.json` (`settings.rs`/`store.rs`,
+    whole-snapshot save). The API key is NOT in it; it lives in the DB `settings` table.
+    Theme/density live in the frontend's localStorage.
+  - Auto-updater (desktop): `tauri-plugin-updater` + `tauri-plugin-process`; `pubkey` in
+    `tauri.conf.json` is empty until a signing key exists, and `*.key` is gitignored
 
-- **`src/`** — SolidJS + TypeScript frontend
-  - Vite-based build
-  - Communicates with Rust backend via `@tauri-apps/api`
+- **`src/`** — Svelte 5 + SvelteKit frontend (adapter-static, SPA, output in `build/`)
+  - Built on `@veelume/ui` (VeeLume/veelume-ui), git-installed and pinned by tag in `package.json`.
+    Its rulebook is `packages/ui/CLAUDE.md` in `../veelume-ui` — read it before building surfaces.
+    Kit fixes go into the kit and a tag bump, never a local copy.
+  - Shell (`Shell.Root`/rail/bottom bar) in `routes/+layout.svelte`; destinations are data in
+    `lib/nav.svelte.ts`, settings categories in `lib/settingsNav.ts`
+  - `bits-ui` must stay pinned to the same exact version as the kit's
+  - `vite.config.ts` excludes the kit from `optimizeDeps` (it ships `.svelte.ts` source)
+  - Calls Rust through the generated `commands` in `src/lib/bindings.ts`; `src/lib/api.ts` holds
+    only helpers (`unwrap`, `formatCoin`). Stores: `settings`, `updater`, `appearance`
 
 ## Features (v1)
 
@@ -35,14 +54,19 @@ A Guild Wars 2 companion application built with Tauri + SolidJS.
 - `anyhow` in the Tauri app layer
 - Tauri commands are `async` and return `Result<T, String>` (Tauri convention)
 - Frontend uses TypeScript strict mode
-- CSS via Tailwind CSS
-- TypeScript mirrors of API types (`src/lib/api.ts`) must match the serialized Rust types in gw2-api
+- CSS via Tailwind CSS v4; theme tokens in `src/theme.css` (shadcn token names), structure in `src/app.css`
+- Never hand-write TypeScript mirrors of Rust types; add a view in `dto.rs` and regenerate the bindings
+- Tauri npm packages and Rust crates must share major.minor (`pnpm tauri info` flags a mismatch,
+  and `tauri build` refuses it); pnpm holds back day-old releases, so bump both sides together
 
 ## Development
 
 ```bash
 # Install frontend deps
-npm install
+pnpm install
+
+# Type-check the frontend
+pnpm check
 
 # Run dev mode (starts both Tauri + Vite)
 cargo tauri dev

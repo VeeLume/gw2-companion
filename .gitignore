@@ -1,7 +1,10 @@
 node_modules
-dist
+/.svelte-kit
+/build
 /target
 .env
 .claude/settings.local.json
 # cargo expand output
 expanded.rs
+# Updater signing key — NEVER commit. The public half lives in tauri.conf.json.
+*.key
