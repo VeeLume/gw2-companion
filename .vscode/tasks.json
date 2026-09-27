@@ -1,15 +1,7 @@
 {
   "version": "2.0.0",
   "tasks": [
-    // ── Regular tests ────────────────────────────────────────────────────────
-    {
-      "label": "test: gw2-api",
-      "type": "shell",
-      "command": "cargo test -p gw2-api",
-      "group": { "kind": "test", "isDefault": true },
-      "presentation": { "reveal": "always", "panel": "shared" },
-      "problemMatcher": "$rustc"
-    },
+    // gw2-api tests and the endpoint CLI live in the gw2-api repo (../gw2-api).
     {
       "label": "test: gw2-db",
       "type": "shell",
@@ -22,88 +14,9 @@
       "label": "test: all",
       "type": "shell",
       "command": "cargo test",
-      "group": "test",
+      "group": { "kind": "test", "isDefault": true },
       "presentation": { "reveal": "always", "panel": "shared" },
       "problemMatcher": "$rustc"
-    },
-    // ── Patch verification (live API, feature-gated) ───────────────────────
-    {
-      "label": "test: verify patches",
-      "detail": "Hits the live GW2 API to confirm patch corrections are still valid. Requires network.",
-      "type": "shell",
-      "command": "cargo test -p gw2-api --features verify-patches -- --nocapture",
-      "group": "test",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
-      "problemMatcher": "$rustc"
-    },
-    // ── CLI — endpoint coverage ───────────────────────────────────────────
-    {
-      "label": "cli: list endpoints",
-      "detail": "List all registered endpoints. Use --diff to compare against live /v2.json.",
-      "type": "shell",
-      "command": "cargo run -p gw2-api-cli -- list",
-      "group": "test",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
-      "problemMatcher": "$rustc"
-    },
-    {
-      "label": "cli: list endpoints (diff vs API manifest)",
-      "detail": "Fetch /v2.json and show which endpoints are implemented vs missing.",
-      "type": "shell",
-      "command": "cargo run -p gw2-api-cli -- list --diff",
-      "group": "test",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
-      "problemMatcher": "$rustc"
-    },
-    {
-      "label": "cli: single test all endpoints",
-      "detail": "Run one representative call per endpoint through the full client stack (rate limiter, retry, patch). Fast.",
-      "type": "shell",
-      "command": "cargo run -p gw2-api-cli -- single --all",
-      "group": "test",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
-      "problemMatcher": "$rustc"
-    },
-    {
-      "label": "cli: single test all endpoints (with auth)",
-      "detail": "Same as single test but also covers auth-required endpoints. Requires GW2_API_KEY env var.",
-      "type": "shell",
-      "command": "cargo run -p gw2-api-cli -- single --all",
-      "options": {
-        "env": { "GW2_API_KEY": "${input:gw2ApiKey}" }
-      },
-      "group": "test",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
-      "problemMatcher": "$rustc"
-    },
-    {
-      "label": "cli: full data fetch (all endpoints)",
-      "detail": "Fetch and deserialize every record from every endpoint. Slow — several minutes.",
-      "type": "shell",
-      "command": "cargo run -p gw2-api-cli -- full --all --concurrency 8",
-      "group": "test",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
-      "problemMatcher": "$rustc"
-    },
-    {
-      "label": "cli: full data fetch (with auth)",
-      "detail": "Full data fetch including auth-required endpoints. Requires GW2_API_KEY env var.",
-      "type": "shell",
-      "command": "cargo run -p gw2-api-cli -- full --all --concurrency 8",
-      "options": {
-        "env": { "GW2_API_KEY": "${input:gw2ApiKey}" }
-      },
-      "group": "test",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
-      "problemMatcher": "$rustc"
-    }
-  ],
-  "inputs": [
-    {
-      "id": "gw2ApiKey",
-      "type": "promptString",
-      "description": "GW2 API key (for auth-required endpoint tests)",
-      "password": true
     }
   ]
 }

@@ -34,7 +34,7 @@ export interface Account {
   fractal_level: number | null;
   daily_ap: number | null;
   monthly_ap: number | null;
-  wvw_rank: number | null;
+  wvw: { team_id: number | null; rank: number | null } | null;
 }
 
 // === Command wrappers ===

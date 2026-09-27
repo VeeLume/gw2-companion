@@ -51,7 +51,7 @@ const Dashboard: Component = () => {
               <p class="text-lg font-medium">{acc.name}</p>
               <p style={{ color: "var(--gw2-muted)" }}>
                 AP: {(acc.daily_ap ?? 0) + (acc.monthly_ap ?? 0)} · WvW Rank:{" "}
-                {acc.wvw_rank ?? "N/A"} · Fractal Level:{" "}
+                {acc.wvw?.rank ?? "N/A"} · Fractal Level:{" "}
                 {acc.fractal_level ?? "N/A"}
               </p>
             </div>

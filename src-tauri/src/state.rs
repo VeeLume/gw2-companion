@@ -36,7 +36,7 @@ impl AppState {
                 )
                 .ok();
 
-            stored_key.and_then(|key| Gw2Client::builder().api_key(key).build().ok())
+            stored_key.and_then(|key| public_client.authenticate(key).ok())
         };
 
         Ok(Self {

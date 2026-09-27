@@ -122,10 +122,11 @@ pub async fn search_recipes_by_output(
 /// Set (or update) the API key. Persists to DB.
 #[tauri::command]
 pub async fn set_api_key(state: State<'_, AppState>, key: String) -> Result<bool, String> {
-    // Validate by creating an authenticated client and testing it
-    let client = Gw2Client::builder()
-        .api_key(&key)
-        .build()
+    // Validate by creating an authenticated client (sharing the public client's
+    // rate limiter and cache) and testing it
+    let client = state
+        .public_client
+        .authenticate(&key)
         .map_err(|e| e.to_string())?;
 
     // Test the key by fetching account info
